@@ -15,7 +15,9 @@ public class Bank {
     private double amount;
 
     public void createAccount() {
-        System.out.println("Qual o seu nome?");
+        System.out.printf("%n~~~~~ CRIAR CONTA ~~~~~%n");
+        System.out.printf("%nQual o seu nome?%n");
+
         Scanner read = new Scanner(System.in);
         String nome = read.nextLine();
 
@@ -48,7 +50,9 @@ public class Bank {
         }
 
         if (this.user == null) {
-            System.out.printf("%nConta inválida%n");
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~");
+            System.out.printf("%n~~ Conta inválida ~~");
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~%n");
         } else {
             showMenu();
         }
@@ -58,7 +62,9 @@ public class Bank {
         boolean validOperation;
 
         while(online) {
-            System.out.printf("%nOlá, %s!%nConta: %s | Agência: %s%n", user.getNome(), user.getNumeroConta(), this.agencia);
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.printf("%nOlá, %s!%nConta: %s | Agência: %s", user.getNome(), user.getNumeroConta(), this.agencia);
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             System.out.printf("%nEssas são as operações disponíveis:%n");
             System.out.printf("1 - Sacar%n2 - Depositar%n3 - Saldo%n4 - Extrato%n5 - Sair%n");
             System.out.println("O que voce deseja fazer?");
@@ -113,7 +119,9 @@ public class Bank {
     private void readAmount() {
         String action = (operation == 1) ? "sacar" : "depositar";
 
+        System.out.printf("%n~~~~~~~~ %s ~~~~~~~~%n", action.toUpperCase());
         System.out.printf("%nQuanto deseja %s?%n", action);
+
         Scanner read = new Scanner(System.in);
         this.amount = read.nextDouble();
     }
@@ -123,10 +131,14 @@ public class Bank {
 
         if (success) {
             user.registerLog(new Log(action, this.amount));
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n");
             System.out.printf("%n%s de %.2f realizado com sucesso!%n", action, this.amount);
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n");
         } else {
-            if (operation == 1) System.out.printf("%nSaldo insuficiente.%n");
-            System.out.printf("%nNão foi possível realizar o %s!%n", action);
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.printf("%nNão foi possível realizar o %s!", action);
+            if (operation == 1) System.out.printf("%nSaldo insuficiente.");
+            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n");
         }
     }
 
