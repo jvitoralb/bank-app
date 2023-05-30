@@ -25,22 +25,12 @@ public class Account {
         return this.numeroConta;
     }
 
-    public void getSaldo() {
-        System.out.printf("%n~~~~~~~~~~~~~~ SALDO ~~~~~~~~~~~~~~%n");
-        System.out.printf("%nSeu saldo atual é de %.2f %n", this.saldo);
-        System.out.printf("%n~~~~~~~~~~~~~~ SALDO ~~~~~~~~~~~~~~%n");
+    public double getSaldo() {
+        return this.saldo;
     }
 
-    public void getExtrato() {
-        System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~ EXTRATO ~~~~~~~~~~~~~~~~~~~~~~~%n");
-        if (logs.isEmpty()) {
-            System.out.printf("%nNenhuma operação realizada.%n");
-        } else {
-            for(int i = 0; i < logs.size(); i++) {
-                System.out.printf("%n%s%n", logs.get(i));
-            }
-        }
-        System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~ EXTRATO ~~~~~~~~~~~~~~~~~~~~~~~%n");
+    public List<String> getExtrato() {
+        return this.logs;
     }
 
     protected boolean sacar(double amount) {
@@ -58,16 +48,5 @@ public class Account {
 
     protected void registerLog(Log lastLog) {
         logs.add(lastLog.getFullLog());
-    }
-
-    @Override
-    public String toString() {
-        return "Account {" +
-                "nome: " + nome + "," +
-                "agencia: " + agencia + "," +
-                "conta_numero: " + numeroConta + "," +
-                "saldo: " + saldo + "," +
-                "logs: " + logs +
-                "}";
     }
 }

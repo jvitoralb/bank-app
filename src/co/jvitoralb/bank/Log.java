@@ -22,7 +22,7 @@ public class Log {
     }
 
     private String formatTime() {
-        return date.getHour() + ":" + date.getMinute();
+        return (date.getHour() + ":" + date.getMinute());
     }
 
     private double getAmount() {

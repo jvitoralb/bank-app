@@ -1,11 +1,14 @@
 package co.jvitoralb.bank;
 
+import co.jvitoralb.printer.Printer;
+
 import java.util.InputMismatchException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Bank {
+    private final Printer printer = new Printer();
     private final String agencia = "001";
     private final List<Account> accountsList = new ArrayList<>();
     private int accountsNumber = 37265;
@@ -15,17 +18,14 @@ public class Bank {
     private double amount;
 
     public void createAccount() {
-        System.out.printf("%n~~~~~ CRIAR CONTA ~~~~~%n");
-        System.out.printf("%nQual o seu nome?%n");
-
         Scanner read = new Scanner(System.in);
         String nome = read.nextLine();
 
         String numeroConta = String.valueOf(generateContaNumero());
         Account newUser = new Account(nome, this.agencia, numeroConta);
 
-        insertAccount(newUser);
-        System.out.printf("%nConta criada com sucesso!%n");
+        registerAccount(newUser);
+        printer.printCreateAccountSuccess();
 
         login(newUser.getNumeroConta());
     }
@@ -35,7 +35,7 @@ public class Bank {
         return accountsNumber;
     }
 
-    private void insertAccount(Account newUser) {
+    private void registerAccount(Account newUser) {
         accountsList.add(newUser);
     }
 
@@ -50,10 +50,9 @@ public class Bank {
         }
 
         if (this.user == null) {
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~");
-            System.out.printf("%n~~ Conta inválida ~~");
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~%n");
+            printer.printLoginFailed();
         } else {
+            printer.printLoginSuccess();
             showMenu();
         }
     }
@@ -62,12 +61,7 @@ public class Bank {
         boolean validOperation;
 
         while(online) {
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            System.out.printf("%nOlá, %s!%nConta: %s | Agência: %s", user.getNome(), user.getNumeroConta(), this.agencia);
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            System.out.printf("%nEssas são as operações disponíveis:%n");
-            System.out.printf("1 - Sacar%n2 - Depositar%n3 - Saldo%n4 - Extrato%n5 - Sair%n");
-            System.out.println("O que voce deseja fazer?");
+            printer.printMainMenu(user.getNome(), user.getNumeroConta(), this.agencia);
 
             validOperation = readOperation();
 
@@ -83,7 +77,7 @@ public class Bank {
             this.operation = read.nextInt();
             return true;
         } catch(InputMismatchException e) {
-            System.out.printf("%nOperação inválida! Digite apenas números.%n");
+            printer.printMainMenuUnavailableOperation();
             return false;
         }
     }
@@ -95,50 +89,45 @@ public class Bank {
             case 1:
                 readAmount();
                 result = user.sacar(this.amount);
-                resolve(result);
+                resolveOperation(result);
                 break;
             case 2:
                 readAmount();
                 result = user.depositar(this.amount);
-                resolve(result);
+                resolveOperation(result);
                 break;
             case 3:
-                user.getSaldo();
+                double saldo = user.getSaldo();
+                printer.printSaldo(saldo);
                 break;
             case 4:
-                user.getExtrato();
+                List<String> extrato = user.getExtrato();
+                printer.printExtrato(extrato);
                 break;
             case 5:
                 exit();
                 break;
             default:
-                System.out.printf("%nOperação não disponível.%n");
+                printer.printMainMenuUnavailableOperation();
         }
     }
 
     private void readAmount() {
         String action = (operation == 1) ? "sacar" : "depositar";
-
-        System.out.printf("%n~~~~~~~~ %s ~~~~~~~~%n", action.toUpperCase());
-        System.out.printf("%nQuanto deseja %s?%n", action);
+        printer.printOperationReadAmount(action);
 
         Scanner read = new Scanner(System.in);
         this.amount = read.nextDouble();
     }
 
-    private void resolve(boolean success) {
+    private void resolveOperation(boolean success) {
         String action = (operation == 1) ? "Saque" : "Depósito";
 
         if (success) {
             user.registerLog(new Log(action, this.amount));
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n");
-            System.out.printf("%n%s de %.2f realizado com sucesso!%n", action, this.amount);
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n");
+            printer.printResolveOperationSuccess(action, this.amount);
         } else {
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            System.out.printf("%nNão foi possível realizar o %s!", action);
-            if (operation == 1) System.out.printf("%nSaldo insuficiente.");
-            System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n");
+            printer.printResolveOperationFailed(action);
         }
     }
 
