@@ -22,12 +22,10 @@ public class Bank {
         String nome = read.nextLine();
 
         String numeroConta = String.valueOf(generateContaNumero());
-        Account newUser = new Account(nome, this.agencia, numeroConta);
+        this.user = new Account(nome, this.agencia, numeroConta);
 
-        registerAccount(newUser);
+        registerAccount();
         printer.printCreateAccountSuccess();
-
-        login(newUser.getNumeroConta());
     }
 
     private int generateContaNumero() {
@@ -35,11 +33,19 @@ public class Bank {
         return accountsNumber;
     }
 
-    private void registerAccount(Account newUser) {
-        accountsList.add(newUser);
+    private void registerAccount() {
+        accountsList.add(this.user);
     }
 
-    public void login(String userContaNumero) {
+    public void login() {
+        String userContaNumero;
+        if (this.user != null) {
+            userContaNumero = this.user.getNumeroConta();
+        } else {
+            Scanner read = new Scanner(System.in);
+            userContaNumero = read.nextLine();
+        }
+
         for(int i = 0; i < accountsList.size(); i++) {
             Account current = accountsList.get(i);
             if (current.getNumeroConta().equals(userContaNumero)) {
@@ -72,8 +78,8 @@ public class Bank {
     }
 
     private boolean readOperation() {
-        Scanner read = new Scanner(System.in);
         try {
+            Scanner read = new Scanner(System.in);
             this.operation = read.nextInt();
             return true;
         } catch(InputMismatchException e) {
@@ -131,7 +137,12 @@ public class Bank {
         }
     }
 
+    private void logout() {
+        this.user = null;
+    }
+
     private void exit() {
+        logout();
         this.online = false;
     }
 }

@@ -26,11 +26,11 @@ public class App {
             case "1":
                 printer.printCreateAccount();
                 adalovelace.createAccount();
+                adalovelace.login();
                 break;
             case "2":
                 printer.printLogin();
-                String numeroConta = readNumeroConta();
-                adalovelace.login(numeroConta);
+                adalovelace.login();
                 break;
             case "3":
                 closeApplication();
@@ -38,11 +38,6 @@ public class App {
             default:
                 printer.printWelcomeMenuInvalidOption();
         }
-    }
-
-    private static String readNumeroConta() {
-        Scanner readNumeroConta = new Scanner(System.in);
-        return readNumeroConta.nextLine();
     }
 
     private static void closeApplication() {
