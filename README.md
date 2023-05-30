@@ -38,10 +38,10 @@ Allows you to withdraw the money.
 This option allows you to Deposit into your account.
 
 `3 - Saldo`
-Show the account's balance.
+Shows the account's balance.
 
 `4 - Extrato`
-Here you can consult the account logs.
+Here you can consult the account's transaction logs.
 
 `5 - Sair`
 Logs out of the account.
