@@ -13,8 +13,8 @@ public class Printer {
         System.out.printf("%nServiços disponíveis: %n1 - Criar conta%n2 - Acessar conta%n3 - Sair do programa%n");
         System.out.printf("%nComo posso ajudar?%n");
     }
-    public void printWelcomeMenuInvalidOption() {
-        System.out.printf("%nOpção inválida.%n");
+    public void printWelcomeMenuInvalidService() {
+        System.out.printf("%nServiço inválida.%n");
     }
     public void printLogin() {
         System.out.printf("%n~~~~~ ACESSAR CONTA ~~~~~%n");
@@ -49,6 +49,10 @@ public class Printer {
     public void printOperationReadAmount(String action) {
         System.out.printf("%n~~~~~~~~ %s ~~~~~~~~%n", action.toUpperCase());
         System.out.printf("%nQuanto deseja %s?%n", action);
+    }
+    public void printOperationReadAmountFailed() {
+        System.out.printf("%nValor inválido!");
+        System.out.printf("%nDigite um número positivo.%n");
     }
     public void printResolveOperationSuccess(String action, double amount) {
         System.out.printf("%n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%n");

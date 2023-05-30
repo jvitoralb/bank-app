@@ -89,29 +89,23 @@ public class Bank {
     }
 
     private void executeOperation() {
-        boolean result;
-
         switch(operation) {
             case 1:
                 readAmount();
-                result = user.sacar(this.amount);
-                resolveOperation(result);
+                resolveOperation(user.sacar(this.amount));
                 break;
             case 2:
                 readAmount();
-                result = user.depositar(this.amount);
-                resolveOperation(result);
+                resolveOperation(user.depositar(this.amount));
                 break;
             case 3:
-                double saldo = user.getSaldo();
-                printer.printSaldo(saldo);
+                printer.printSaldo(user.getSaldo());
                 break;
             case 4:
-                List<String> extrato = user.getExtrato();
-                printer.printExtrato(extrato);
+                printer.printExtrato(user.getExtrato());
                 break;
             case 5:
-                exit();
+                logout();
                 break;
             default:
                 printer.printMainMenuUnavailableOperation();
@@ -119,16 +113,22 @@ public class Bank {
     }
 
     private void readAmount() {
-        String action = (operation == 1) ? "sacar" : "depositar";
-        printer.printOperationReadAmount(action);
-
-        Scanner read = new Scanner(System.in);
-        this.amount = read.nextDouble();
+        printer.printOperationReadAmount(calculateAction());
+        try {
+            Scanner read = new Scanner(System.in);
+            double amount = read.nextDouble();
+            if (amount < 0) {
+                throw new InputMismatchException();
+            }
+            this.amount = amount;
+        } catch(InputMismatchException e) {
+            printer.printOperationReadAmountFailed();
+            readAmount();
+        }
     }
 
     private void resolveOperation(boolean success) {
-        String action = (operation == 1) ? "Saque" : "Depósito";
-
+        String action = calculateAction();
         if (success) {
             user.registerLog(new Log(action, this.amount));
             printer.printResolveOperationSuccess(action, this.amount);
@@ -137,12 +137,15 @@ public class Bank {
         }
     }
 
-    private void logout() {
-        this.user = null;
+    private String calculateAction() {
+        if (operation == 1) {
+            return "sacar";
+        }
+        return "depositar";
     }
 
-    private void exit() {
-        logout();
+    private void logout() {
+        this.user = null;
         this.online = false;
     }
 }

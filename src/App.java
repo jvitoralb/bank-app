@@ -36,7 +36,7 @@ public class App {
                 closeApplication();
                 break;
             default:
-                printer.printWelcomeMenuInvalidOption();
+                printer.printWelcomeMenuInvalidService();
         }
     }
 
